@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>{% block title %} Тренеровка {{ training['description']  }} {% endblock %}</h2>
+<h2>{% block title %} Клиент  {{ client['name']  }} {% endblock %}</h2>
 <hr>
 <table class="table">
     <thead>
@@ -11,24 +11,20 @@
     </thead>
     <tbody>
         <tr>
-            <td>Длительность</th>
-            <td>{{ training['duration'] }} ч</th>
+            <td>Имя</th>
+            <td>{{ client['name'] }} </th>
         </tr>
         <tr>
-            <td>Тренер</th>
-            <td>{{ training['employee_id'] }} </th>
+            <td>Почта</th>
+            <td>{{  client['email'] }} </th>
         </tr>
         <tr>
-            <td>Количество</th>
-            <td>{{ training['amount'] }} </th>
+            <td>Номер телефона</th>
+            <td>{{  client['phone_number'] }} </th>
         </tr>
         <tr>
-            <td>Пояснение</th>
-            <td>{{ training['description'] }} </th>
-        </tr>
-        <tr>
-            <td>Клиент</th>
-            <td>{{ training['client_id'] }}</th>
+            <td>Пасспорт</th>
+            <td>{{  client['passport'] }} </th>
         </tr>
     </tbody>
 </table>
@@ -39,6 +35,7 @@
             <button type="submit" class="btn btn-secondary"><i class="bi-people"></i> Перейти к клиенту</button>
         </a>
     </div>
+
 </div>
 
 {% endblock %}

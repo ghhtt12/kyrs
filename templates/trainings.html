@@ -1,31 +1,22 @@
-
 {% extends 'base.html' %}
 {% block content %}
-<h1>{% block title %} Текущие квартиры {% endblock %}</h1>
+<h1>{% block title %} Текущие тренировки {% endblock %}</h1>
 
 <div class="container mt-5 mb-3">
     <div class="row">
-        {% for training in atrainings %}
+        {% for training in trainings %}
         <div class="col-md-4">
             <div class="card p-3 mb-2 border-primary">
                 <div class="card-header">
                     <a href="{{ url_for('training', training_id=training['id_training']) }}">>
-                        <b>Квартира по договору # {{ training['number'] }} от {{ training['date'] }}</b>
+                        <b>тренировка {{ training['employee_id'] }}</b>
                     </a>
                     <br>
-                    <span class="badge bg-warning">{{ training['deal_type'] }}</span>
-                    {% if training['deal_status']==False %}
-                    <span class="badge bg-success"> в работе </span>
-                    {% else %}
-                    <span class="badge bg-danger"> сделка завершена </span>
-                    {% endif %}
+                    <span class="badge bg-warning">{{ training['employee_id'] }}</span>
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">{{ training['address'] }} <span class="badge bg-primary">{{
-                            training['start_price'] }} ₽</span></h5>
-                    <span class="badge bg-success">площадь {{ training['area'] }}</span>
-                    <span class="badge bg-danger">{{ training['rooms'] }}-комнатная</span>
-                    <span class="badge bg-info">этаж {{ training['floor'] }}</span>
+                    <h5 class="card-title">{{ training['duration'] }}
+                    </h5>
                 </div>
             </div>
         </div>

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{% block title %} Сотрудники {% endblock %}</h1>
+
+<div class="container mt-5 mb-3">
+    <div class="row">
+        {% for employee in employees %}
+        <div class="col-md-4">
+            <div class="card p-3 mb-2 border-primary">
+                <div class="card-header">
+                    <a href="{{ url_for('employee', employee_id=employee['id_employee']) }}">>
+                        <b>Сотрудник {{ employee['name'] }}</b>
+                    </a>
+                    <br>
+                    <span class="badge bg-warning">{{ employee['email'] }}</span>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ employee['phone_number'] }} <span class="badge bg-primary">{{
+                            employee['passport'] }} </span></h5>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

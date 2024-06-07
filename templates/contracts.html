@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
 <h1>{% block title %} Текущие договоры {% endblock %}</h1>
-
 <div class="container mt-5 mb-3">
     <div class="row">
         {% for contract in contracts %}
@@ -20,9 +19,9 @@
                     {% endif %}
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">{{ contract['address'] }} <span class="badge bg-primary">{{
-                            contract['start_price'] }} ₽</span></h5>
-                    <p class="card-text">{{ contract['name'] }}</p>
+                    <h5 class="card-title">{{ contract['discount'] }} <span class="badge bg-primary">{{
+                            contract['price'] }} ₽</span></h5>
+                    <p class="card-text">{{ contract['date'] }}</p>
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>{% block title %} Договор # {{ contract['number'] }} от {{ contract['date'] }} {% endblock %}</h2>
+<h2>{% block title %} Сотрудник  {{ employee['name'] }} {% endblock %}</h2>
 <hr>
 <table class="table">
     <thead>
@@ -11,16 +11,20 @@
     </thead>
     <tbody>
         <tr>
-            <td>Стартовая цена</th>
-            <td>{{ contract['price'] }} ₽</th>
+            <td>Номер телефона</th>
+            <td>{{ employee['phone_number'] }} </th>
         </tr>
         <tr>
-            <td>Максимальная скидка</th>
-            <td>{{ contract['discount'] }} %</th>
+            <td>Почта</th>
+            <td>{{ employee['email'] }} </th>
         </tr>
         <tr>
-            <td>Цена сделки</th>
-            <td>{{ contract['finish_price'] }} ₽</th>
+            <td>Должность</th>
+            <td>{{ employee['position'] }} </th>
+        </tr>
+         <tr>
+            <td>Департамент</th>
+            <td>{{ employee['department'] }} </th>
         </tr>
     </tbody>
 </table>
