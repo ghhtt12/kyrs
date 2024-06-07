@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>{% block title %} Отчет  #{{ report'number'] }} от {{ report['date'] }} {% endblock %}</h2>
+{% block title %}<h2>Отчет  {{ report['number'] }} от {{ report['date'] }}</h2>{% endblock %}
 <hr>
 <table class="table">
     <thead>
@@ -11,12 +11,16 @@
     </thead>
     <tbody>
         <tr>
-            <td>Стартовая цена</th>
-            <td>{{ report['report_type'] }} ₽</th>
+            <td>Тип отчета</th>
+            <td>{{ report['report_type'] }} </th>
         </tr>
         <tr>
-            <td>Максимальная скидка</th>
-            <td>{{ report['description'] }} %</th>
+            <td>Описание отчета</th>
+            <td>{{ report['description'] }} </th>
+        </tr>
+        <tr>
+            <td>Работник</th>
+            <td>{{ report['employee_id'] }} </th>
         </tr>
     </tbody>
 </table>
