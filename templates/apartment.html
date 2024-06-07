@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{% block title %} Квартира по договору # {{ apartment['number'] }} от {{ apartment['date'] }} {% endblock %}</h2>
+<span class="badge bg-warning">{{ apartment['deal_type'] }}</span>
+{% if apartment['deal_status']==False %}
+<span class="badge bg-success"> в работе </span>
+{% else %}
+<span class="badge bg-danger"> сделка завершена </span>
+{% endif %}
+<hr>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Позиция</th>
+            <th scope="col">Значение</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Адрес</th>
+            <td>{{ apartment['address'] }} ₽</th>
+        </tr>
+        <tr>
+            <td>Стартовая цена</th>
+            <td>{{ apartment['start_price'] }} ₽</th>
+        </tr>
+        <tr>
+            <td>Максимальная скидка</th>
+            <td>{{ apartment['discount'] }} %</th>
+        </tr>
+        <tr>
+            <td>Минимальная цена</th>
+            <td>{{ apartment['start_price'] * (100 - apartment['discount']) // 100 }} ₽</th>
+        </tr>
+        <tr>
+            <td>Цена сделки</th>
+            <td>{{ apartment['finish_price'] }} ₽</th>
+        </tr>
+        <tr>
+            <td>Клиент</th>
+            <td>{{ apartment['name'] }}</th>
+        </tr>
+        <tr>
+            <td>Контакты клиента</th>
+            <td>тел.: {{ apartment['phone_number'] }}, почта: {{ apartment['email'] }}</th>
+        </tr>
+        <tr>
+            <td>Квартира, площадь</th>
+            <td>{{ apartment['area'] }}</th>
+        </tr>
+        <tr>
+            <td>Квартира, этаж'</th>
+            <td>{{ apartment['floor'] }}</th>
+        </tr>
+        <tr>
+            <td>Квартира, количество комнат</th>
+            <td>{{ apartment['rooms'] }}</th>
+        </tr>
+        <tr>
+            <td>Квартира, описание</th>
+            <td>{{ apartment['description'] }}</th>
+        </tr>
+    </tbody>
+</table>
+
+<div class="row">
+    <div class="col-auto">
+        <a href="/clients">
+            <button type="submit" class="btn btn-secondary"><i class="bi-people"></i> Перейти к клиенту</button>
+        </a>
+    </div>
+    <div class="col-auto">
+        <a href="{{ url_for('contract', contract_id=apartment['id_contract']) }}">
+            <button type="submit" class="btn btn-secondary"><i class="bi-file-earmark-binary"></i> Перейти к договору</button>
+        </a>
+    </div>
+</div>
+
+{% endblock %}

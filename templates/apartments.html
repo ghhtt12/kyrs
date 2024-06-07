@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{% block title %} Текущие квартиры {% endblock %}</h1>
+
+<div class="container mt-5 mb-3">
+    <div class="row">
+        {% for apartment in apartments %}
+        <div class="col-md-4">
+            <div class="card p-3 mb-2 border-primary">
+                <div class="card-header">
+                    <a href="{{ url_for('apartment', apartment_id=apartment['id_apartment']) }}">>
+                        <b>Квартира по договору # {{ apartment['number'] }} от {{ apartment['date'] }}</b>
+                    </a>
+                    <br>
+                    <span class="badge bg-warning">{{ apartment['deal_type'] }}</span>
+                    {% if apartment['deal_status']==False %}
+                    <span class="badge bg-success"> в работе </span>
+                    {% else %}
+                    <span class="badge bg-danger"> сделка завершена </span>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ apartment['address'] }} <span class="badge bg-primary">{{
+                            apartment['start_price'] }} ₽</span></h5>
+                    <span class="badge bg-success">площадь {{ apartment['area'] }}</span>
+                    <span class="badge bg-danger">{{ apartment['rooms'] }}-комнатная</span>
+                    <span class="badge bg-info">этаж {{ apartment['floor'] }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

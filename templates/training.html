@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{% block title %} Квартира по договору # {{ training['employee_id'] }} от {{ training['amount'] }} {% endblock %}</h2>
+<hr>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Позиция</th>
+            <th scope="col">Значение</th>
+        </tr>
+    </thead>
+    <tbody>
+    duration','employee_id', 'amount',  'description', 'client_id'
+        <tr>
+            <td>Длительность</th>
+            <td>{{ training['duration'] }} ₽</th>
+        </tr>
+        <tr>
+            <td>Стартовая цена</th>
+            <td>{{ training['employee_id'] }} ₽</th>
+        </tr>
+        <tr>
+            <td>Максимальная скидка</th>
+            <td>{{ training['amount] }} %</th>
+        </tr>
+        <tr>
+            <td>Минимальная цена</th>
+            <td>{{ training['description'] }} </th>
+        </tr>
+        <tr>
+            <td>Квартира, описание</th>
+            <td>{{ training['description'] }}</th>
+        </tr>
+    </tbody>
+</table>
+
+<div class="row">
+    <div class="col-auto">
+        <a href="/clients">
+            <button type="submit" class="btn btn-secondary"><i class="bi-people"></i> Перейти к клиенту</button>
+        </a>
+    </div>
+    <div class="col-auto">
+        <a href="{{ url_for('contract', contract_id=training['id_contract']) }}">
+            <button type="submit" class="btn btn-secondary"><i class="bi-file-earmark-binary"></i> Перейти к договору</button>
+        </a>
+    </div>
+</div>
+
+{% endblock %}
