@@ -32,9 +32,9 @@
         </a>
     </div>
     <div class="col-auto">
-        <form method="POST">
+        <a href="{{ url_for('generate_contract', id_contract=contract['id_contract']) }}">
             <button type="submit" class="btn btn-primary"><i class="bi-printer"></i> Скачать договор</button>
-        </form>
+        </a>
     </div>
 </div>
 

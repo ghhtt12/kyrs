@@ -30,7 +30,7 @@ def new_contract():
         date = request.form['date']
         price = int(request.form['price'])
         discount = int(request.form['discount'])
-        finish_price = None
+        finish_price = price  * (1-discount*0.01)
         deal_status = 0
         client_id = int(request.form.get('client'))
         training_id = int(request.form.get('training'))
@@ -170,48 +170,7 @@ def contract(contract_id):
     return render_template('contract.html', contract=pos)
 
 # Квартиры
-'''
-    if request.method == 'POST':
-        # добавление нового контракта в БД псоле заполнения формы
-        try:
-            number = request.form['number']
-            date = request.form['date']
-            price = int(request.form['price'])
-            discount = int(request.form['discount'])
-            finish_price = price*discount
-            deal_status = 0
-            client_id = int(request.form.get('client'))
-            training_id = int(request.form.get('training'))
-            employee_id = int(request.form.get('employee'))
-        except ValueError:
-            flash('Некорректные значения')
-            client_id = 0
-        if not (client_id > 0 and training_id > 0 and employee_id > 0):
-            flash('Не все поля заполнены')
-        else:
-            if not (number and date and price and discount ):
-                flash('Не все поля заполнены')
-            else:
-                conn = get_db_connection()
-                cursor = conn.cursor()
-                cursor.execute(
-                    "INSERT INTO 'contracts' ('number', 'date', 'price', 'discount', 'deal_status', 'finish_price', 'training_id', 'client_id', 'employee_id')  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                    (number, date, price, discount, deal_status, finish_price, training_id, client_id,
-                     employee_id))
-                conn.commit()
-                new_contract_id = cursor.lastrowid
-                print(new_contract_id)
-                conn.close()
-                return redirect(f'/contract/{new_contract_id}')
 
-    # отрисовка формы
-    conn = get_db_connection()
-    pos1 = conn.execute("""SELECT * FROM clients""").fetchall()
-    pos2 = conn.execute("""SELECT * FROM trainings""").fetchall()
-    pos3 = conn.execute("""SELECT * FROM employees""").fetchall()
-    conn.close()
-    return render_template('new_contract.html', clients=pos1, trainings=pos2, employees=pos3)
-'''
 def new_training():
     """ Страница-добавления новой квартиры """
 
