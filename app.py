@@ -1,8 +1,10 @@
 import os
 import sqlite3
+from xml.dom.minidom import Document
+
 from flask import Flask, render_template, redirect, request, flash, send_from_directory
 from werkzeug.exceptions import abort
-import docx
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = b'my)secret)key'
@@ -112,12 +114,10 @@ def generate_contract():
 
 def create_contract(id, contract_params):
     """ Создание нового документа по шаблону """
-
-    template = os.path.join('pythonProject4/contracts', 'contract_template.docx')
     result = os.path.join('pythonProject4/contracts',
                           f"договор {contract_params['CONTRACT_NUMBER']} от {contract_params['CONTRACT_DATE']}.docx")
 
-    template_doc = docx.Document(template)
+    template_doc = Document(os.path.abspath('pythonProject4/contracts/contract_template'))
     for key, value in contract_params.items():
         for paragraph in template_doc.paragraphs:
             replace_text(paragraph, f'=={key}==', value)
@@ -170,7 +170,7 @@ def contract(contract_id):
     return render_template('contract.html', contract=pos)
 
 # Квартиры
-
+@app.route('/new_training', methods=('GET', 'POST'))
 def new_training():
     """ Страница-добавления новой квартиры """
 
@@ -195,15 +195,14 @@ def new_training():
                 conn = get_db_connection()
                 cursor = conn.cursor()
                 cursor.execute(
-                    "INSERT INTO 'contracts' ('duration', 'description', 'amount', 'client_id', 'employee_id')  VALUES (?, ?, ?, ?, ?)",
+                    "INSERT INTO 'trainings' ('duration', 'description', 'amount', 'client_id', 'employee_id')  VALUES (?, ?, ?, ?, ?)",
                     (duration, description, amount, client_id,
                      employee_id))
                 conn.commit()
                 new_training_id = cursor.lastrowid
                 print(new_training_id)
                 conn.close()
-                return redirect(f'/contract/{new_training_id}')
-
+                return redirect(f'/training/{new_training_id}')
     # отрисовка формы
     conn = get_db_connection()
     pos1 = conn.execute("""SELECT * FROM clients""").fetchall()
@@ -231,6 +230,37 @@ def training(training_id):
     pos = get_training(training_id)
     return render_template('training.html', training=pos)
 
+@app.route('/new_client', methods=('GET', 'POST'))
+def new_client():
+    """ Страница-добавления новой квартиры """
+
+
+    if request.method == 'POST':
+        # добавление нового контракта в БД псоле заполнения формы
+        try:
+            name = request.form['name']
+            email = request.form['email']
+            phone_number = request.form['phone_number']
+            passport = request.form['passport']
+        except ValueError:
+            flash('Некорректные значения')
+            passport = 0
+        else:
+            if not (name and email and phone_number ):
+                flash('Не все поля заполнены')
+            else:
+                conn = get_db_connection()
+                cursor = conn.cursor()
+                cursor.execute(
+                    "INSERT INTO 'clients' ('name', 'email', 'phone_number', 'passport')  VALUES (?, ?, ?, ?)",
+                    (name, email, phone_number, passport))
+                conn.commit()
+                new_client_id = cursor.lastrowid
+                print(new_client_id)
+                conn.close()
+                return redirect(f'/client/{new_client_id}')
+    # отрисовка формы
+    return render_template('new_client.html')
 
 @app.route('/clients')
 def clients():
@@ -252,7 +282,41 @@ def client(client_id):
     pos = get_client(client_id)
     return render_template('client.html', client=pos)
 
+@app.route('/new_report', methods=('GET', 'POST'))
+def new_report():
+    """ Страница-добавления новой квартиры """
 
+    if request.method == 'POST':
+        # добавление нового контракта в БД псоле заполнения формы
+        try:
+            number = request.form['number']
+            date = request.form['date']
+            report_type = request.form['report_type']
+            description = request.form['description']
+            employee_id = int(request.form.get('employee'))
+        except ValueError:
+            flash('Некорректные значения')
+            return render_template('new_report.html')  # прерываем выполнение функции
+        else:
+            if not (number and date and report_type and description and employee_id):
+                flash('Не все поля заполнены')
+            else:
+                conn = get_db_connection()
+                cursor = conn.cursor()
+                cursor.execute(
+                    "INSERT INTO 'reports' ('number', 'date', 'report_type', 'description', 'employee_id')  VALUES (?, ?, ?, ?, ?)",
+                    (number, date, report_type, description,
+                     employee_id))
+                conn.commit()
+                new_report_id = cursor.lastrowid
+                print(new_report_id)
+                conn.close()
+                return redirect(f'/report/{new_report_id}')
+    # отрисовка формы
+    conn = get_db_connection()
+    pos3 = conn.execute("""SELECT * FROM employees""").fetchall()
+    conn.close()  # закрываем соединение
+    return render_template('new_report.html', employees=pos3)
 
 @app.route('/reports')
 def reports():
@@ -273,6 +337,38 @@ def get_report(item_id):
 def report(report_id):
     pos = get_report(report_id)
     return render_template('report.html', report=pos)
+
+@app.route('/new_employee', methods=('GET', 'POST'))
+def new_employee():
+    """ Страница-добавления новой квартиры """
+
+    if request.method == 'POST':
+        # добавление нового контракта в БД псоле заполнения формы
+        try:
+            name = request.form['name']
+            email = request.form['email']
+            phone_number = request.form['phone_number']
+            position = request.form['position']
+            department = request.form['department']
+            chief_id = int(request.form['chief_id'])
+        except ValueError:
+            flash('Некорректные значения')
+            position = 0
+        else:
+            if not (name and email and phone_number):
+                flash('Не все поля заполнены')
+            else:
+                conn = get_db_connection()
+                cursor = conn.cursor()
+                cursor.execute(
+                    "INSERT INTO 'employees' ('name', 'email', 'phone_number', 'position','department','chief_id')  VALUES (?, ?, ?, ?, ?, ?)",
+                    (name, email, phone_number, position,department,chief_id))
+                conn.commit()
+                new_employee_id = cursor.lastrowid
+                print(new_employee_id)
+                conn.close()
+                return redirect(f'/employee/{new_employee_id}')
+    return render_template('new_employee.html')
 
 
 @app.route('/employees')

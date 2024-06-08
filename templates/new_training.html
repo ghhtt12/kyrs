@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{% block title %} Добавление новой тренировки {% endblock %}</h1>
+<br>
+<form method="post" class="px-4">
+    <div class="row mb-3">
+        <label for="description" class="col-sm-3 col-form-label">Описание</label>
+        <div class="col-sm-2">
+            <input type="text" class="form-control" name="description" value="{{ request.form['description'] }}" placeholder="2024-1-ПП">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="amount" class="col-sm-3 col-form-label">Количество</label>
+        <div class="col-sm-2">
+            <input type="text" class="form-control" name="amount" value="{{ request.form['amount'] }}" placeholder="0">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="client" class="col-sm-3 col-form-label">Клиент</label>
+        <div class="col-sm-8">
+            <select class="form-select" name="client">
+                <option value='0'>Клиент...</option>
+                {% for c in clients %}
+                    <option value={{c.id_client}}>{{c.name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+     <div class="row mb-3">
+        <label for="duration" class="col-sm-3 col-form-label">Длительность</label>
+        <div class="col-sm-2">
+            <input type="text" class="form-control" name="duration" value="{{ request.form['duration'] }}" placeholder="0">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="employee" class="col-sm-3 col-form-label">Сотрудники</label>
+        <div class="col-sm-8">
+            <select class="form-select" name="employee">
+                <option value='0'>Сотрудник...</option>
+                {% for e in employees %}
+                    <option value={{e.id_employee}}>{{e.name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary"><i class="bi-file-earmark-binary"></i> Добавить тренировки</button>
+</form>
+
+{% endblock %}
