@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-{% block title %}<h2>Отчет  {{ report['number'] }} от {{ report['date'] }}</h2>{% endblock %}
+{% block title %}<h2>Услуга {{ report['number'] }} от {{ report['date'] }}</h2>{% endblock %}
 <hr>
 <table class="table">
     <thead>
@@ -11,11 +11,11 @@
     </thead>
     <tbody>
         <tr>
-            <td>Тип отчета</th>
+            <td>Тип услуги</th>
             <td>{{ report['report_type'] }} </th>
         </tr>
         <tr>
-            <td>Описание отчета</th>
+            <td>Описание услуги</th>
             <td>{{ report['description'] }} </th>
         </tr>
         <tr>

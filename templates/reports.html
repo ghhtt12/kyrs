@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>{% block title %} Отчеты {% endblock %}</h1>
+<h1>{% block title %} Услуги {% endblock %}</h1>
 
 <div class="container mt-5 mb-3">
     <div class="row">
@@ -9,7 +9,7 @@
             <div class="card p-3 mb-2 border-primary">
                 <div class="card-header">
                     <a href="{{ url_for('report', report_id=report['id_report']) }}">>
-                        <b>Отчет {{ report['number'] }}</b>
+                        <b>Услуга {{ report['number'] }}</b>
                     </a>
                     <br>
                     <span class="badge bg-warning">{{ report['employee_id'] }}</span>
