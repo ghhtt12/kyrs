@@ -5,16 +5,17 @@ from docx import Document
 from flask import Flask, render_template, redirect, request, flash, send_from_directory
 from werkzeug.exceptions import abort
 
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = b'my)secret)key'
 UPLOAD_FOLDER = 'contracts'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+
 def get_db_connection():
-    conn = sqlite3.connect('../pythonProject4/database.db')
+    conn = sqlite3.connect('../kyrs/database.db')
     conn.row_factory = sqlite3.Row
     return conn
+
 
 @app.route('/')
 def index():
@@ -32,7 +33,7 @@ def new_contract():
         date = request.form['date']
         price = int(request.form['price'])
         discount = int(request.form['discount'])
-        finish_price = price  * (1-discount*0.01)
+        finish_price = price * (1 - discount * 0.01)
         deal_status = 0
         client_id = int(request.form.get('client'))
         training_id = int(request.form.get('training'))
@@ -40,7 +41,7 @@ def new_contract():
         if not (client_id > 0 and training_id > 0 and employee_id > 0):
             flash('Не все поля заполнены')
         else:
-            if not (number and date and price and discount ):
+            if not (number and date and price and discount):
                 flash('Не все поля заполнены')
             else:
                 conn = get_db_connection()
@@ -93,7 +94,7 @@ def generate_contract():
         'CLIENT_FULLNAME': ['ФИО клиента', pos['name']],
         'CLIENT_PASSPORT_NUMBER': ['серия и номер паспорта клиента', pos['passport']],
         'EMPLOYEE_POSITION': ['должность сотрудника риэлторской компании', pos['position']],
-        'EMPLOYEE_FULLNAME': ['ФИО сотрудника риэлторской компании', pos['name']],}
+        'EMPLOYEE_FULLNAME': ['ФИО сотрудника риэлторской компании', pos['name']], }
 
     if request.method == 'POST':
         # создание нового документа
@@ -114,16 +115,17 @@ def generate_contract():
 
 def create_contract(id, contract_params):
     """ Создание нового документа по шаблону """
-    result = os.path.join('pythonProject4/contracts',
+    result = os.path.join('kyrs/contracts',
                           f"договор {contract_params['CONTRACT_NUMBER']} от {contract_params['CONTRACT_DATE']}.docx")
-    template_path='contract_template.docx'
+    template_path = 'contract_template.docx'
     template_doc = Document(template_path)
+    path = 'договор 2024-1-ПП от 01.04.2024.docx'
     for key, value in contract_params.items():
         for paragraph in template_doc.paragraphs:
             replace_text(paragraph, f'=={key}==', value)
         for table in template_doc.tables:
             replace_text_in_tables(table, key, value)
-    template_doc.save(result)
+    template_doc.save(path)
 
 
 def replace_text(paragraph, key, value):
@@ -142,7 +144,6 @@ def replace_text_in_tables(table, key, value):
                 cell.text = cell.text.replace(key, value)
 
 
-
 # Контракты
 
 @app.route('/contracts')
@@ -154,6 +155,7 @@ def contracts():
     conn.close()
     return render_template('contracts.html', contracts=pos)
 
+
 def get_contract(item_id):
     conn = get_db_connection()
     item = conn.execute("""SELECT * FROM contracts, trainings, clients
@@ -164,16 +166,17 @@ def get_contract(item_id):
         abort(404)
     return item
 
+
 @app.route('/contract/<int:contract_id>')
 def contract(contract_id):
     pos = get_contract(contract_id)
     return render_template('contract.html', contract=pos)
 
+
 # Квартиры
 @app.route('/new_training', methods=('GET', 'POST'))
 def new_training():
     """ Страница-добавления новой квартиры """
-
 
     if request.method == 'POST':
         # добавление нового контракта в БД псоле заполнения формы
@@ -186,10 +189,10 @@ def new_training():
         except ValueError:
             flash('Некорректные значения')
             client_id = 0
-        if not (client_id > 0  and employee_id > 0):
+        if not (client_id > 0 and employee_id > 0):
             flash('Не все поля заполнены')
         else:
-            if not (duration and description and amount ):
+            if not (duration and description and amount):
                 flash('Не все поля заполнены')
             else:
                 conn = get_db_connection()
@@ -210,12 +213,14 @@ def new_training():
     conn.close()
     return render_template('new_training.html', clients=pos1, employees=pos3)
 
+
 @app.route('/trainings')
 def trainings():
     conn = get_db_connection()
     pos = conn.execute("""SELECT * FROM trainings""").fetchall()
     conn.close()
     return render_template('trainings.html', trainings=pos)
+
 
 def get_training(item_id):
     conn = get_db_connection()
@@ -225,15 +230,16 @@ def get_training(item_id):
         abort(404)
     return item
 
+
 @app.route('/training/<int:training_id>')
 def training(training_id):
     pos = get_training(training_id)
     return render_template('training.html', training=pos)
 
+
 @app.route('/new_client', methods=('GET', 'POST'))
 def new_client():
     """ Страница-добавления новой квартиры """
-
 
     if request.method == 'POST':
         # добавление нового контракта в БД псоле заполнения формы
@@ -246,7 +252,7 @@ def new_client():
             flash('Некорректные значения')
             passport = 0
         else:
-            if not (name and email and phone_number ):
+            if not (name and email and phone_number):
                 flash('Не все поля заполнены')
             else:
                 conn = get_db_connection()
@@ -262,12 +268,14 @@ def new_client():
     # отрисовка формы
     return render_template('new_client.html')
 
+
 @app.route('/clients')
 def clients():
     conn = get_db_connection()
     pos = conn.execute("""SELECT * FROM clients""").fetchall()
     conn.close()
     return render_template('clients.html', clients=pos)
+
 
 def get_client(item_id):
     conn = get_db_connection()
@@ -277,10 +285,12 @@ def get_client(item_id):
         abort(404)
     return item
 
+
 @app.route('/client/<int:client_id>')
 def client(client_id):
     pos = get_client(client_id)
     return render_template('client.html', client=pos)
+
 
 @app.route('/new_report', methods=('GET', 'POST'))
 def new_report():
@@ -318,12 +328,14 @@ def new_report():
     conn.close()  # закрываем соединение
     return render_template('new_report.html', employees=pos3)
 
+
 @app.route('/reports')
 def reports():
     conn = get_db_connection()
     pos = conn.execute("""SELECT * FROM reports""").fetchall()
     conn.close()
     return render_template('reports.html', reports=pos)
+
 
 def get_report(item_id):
     conn = get_db_connection()
@@ -333,10 +345,12 @@ def get_report(item_id):
         abort(404)
     return item
 
+
 @app.route('/report/<int:report_id>')
 def report(report_id):
     pos = get_report(report_id)
     return render_template('report.html', report=pos)
+
 
 @app.route('/new_employee', methods=('GET', 'POST'))
 def new_employee():
@@ -362,7 +376,7 @@ def new_employee():
                 cursor = conn.cursor()
                 cursor.execute(
                     "INSERT INTO 'employees' ('name', 'email', 'phone_number', 'position','department','chief_id')  VALUES (?, ?, ?, ?, ?, ?)",
-                    (name, email, phone_number, position,department,chief_id))
+                    (name, email, phone_number, position, department, chief_id))
                 conn.commit()
                 new_employee_id = cursor.lastrowid
                 print(new_employee_id)
@@ -378,6 +392,7 @@ def employees():
     conn.close()
     return render_template('employees.html', employees=pos)
 
+
 def get_employee(item_id):
     conn = get_db_connection()
     item = conn.execute("""SELECT * FROM employees WHERE id_employee = ?""", (item_id,)).fetchone()
@@ -386,14 +401,17 @@ def get_employee(item_id):
         abort(404)
     return item
 
+
 @app.route('/employee/<int:employee_id>')
 def employee(employee_id):
     pos = get_employee(employee_id)
     return render_template('employee.html', employee=pos)
 
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
+
 
 if __name__ == '__main__':
     app.run()
