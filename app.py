@@ -1,6 +1,6 @@
 import os
 import sqlite3
-from xml.dom.minidom import Document
+from docx import Document
 
 from flask import Flask, render_template, redirect, request, flash, send_from_directory
 from werkzeug.exceptions import abort
@@ -116,8 +116,8 @@ def create_contract(id, contract_params):
     """ Создание нового документа по шаблону """
     result = os.path.join('pythonProject4/contracts',
                           f"договор {contract_params['CONTRACT_NUMBER']} от {contract_params['CONTRACT_DATE']}.docx")
-
-    template_doc = Document(os.path.abspath('pythonProject4/contracts/contract_template'))
+    template_path='contract_template.docx'
+    template_doc = Document(template_path)
     for key, value in contract_params.items():
         for paragraph in template_doc.paragraphs:
             replace_text(paragraph, f'=={key}==', value)
