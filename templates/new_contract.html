@@ -18,7 +18,7 @@
             <select class="form-select" name="training">
                 <option value='0'>Тренировка...</option>
                 {% for a in trainings %}
-                    <option value={{a.id_training}}>{{a.training}}</option>
+                    <option value={{a.id_training}}>{{a.description}}</option>
                 {% endfor %}
             </select>
         </div>

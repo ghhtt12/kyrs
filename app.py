@@ -2,6 +2,7 @@ import os
 import sqlite3
 from docx import Document
 
+
 from flask import Flask, render_template, redirect, request, flash, send_from_directory
 from werkzeug.exceptions import abort
 
@@ -12,7 +13,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 def get_db_connection():
-    conn = sqlite3.connect('../kyrs/database.db')
+    conn = sqlite3.connect('../pythonProject4/database.db')
     conn.row_factory = sqlite3.Row
     return conn
 
