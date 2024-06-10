@@ -1,9 +1,11 @@
 import os
 import sqlite3
+from io import BytesIO
+
 from docx import Document
 
 
-from flask import Flask, render_template, redirect, request, flash, send_from_directory
+from flask import Flask, render_template, redirect, request, flash, send_from_directory,send_file
 from werkzeug.exceptions import abort
 
 app = Flask(__name__)
@@ -101,12 +103,9 @@ def generate_contract():
         # создание нового документа
         result_params = request.form.to_dict()
         create_contract(id, result_params)
-        return redirect(f'/contract/{id}')
+        filename = f"договор {pos['number']} от {pos['date']}.docx"
+        return send_file(filename)
 
-    # скачивание файла, если он заполнен
-    filename = f"договор {pos['number']} от {pos['date']}.docx"
-    if os.path.exists(os.path.join('pythonProject4/contracts', filename)):
-        return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
     else:
         # отрисовка формы заполнения
         flash('Договор не сформирован, заполните его')
@@ -116,17 +115,17 @@ def generate_contract():
 
 def create_contract(id, contract_params):
     """ Создание нового документа по шаблону """
-    result = os.path.join('kyrs/contracts',
+    result = os.path.join(
                           f"договор {contract_params['CONTRACT_NUMBER']} от {contract_params['CONTRACT_DATE']}.docx")
     template_path = 'contract_template.docx'
     template_doc = Document(template_path)
-    path = 'договор 2024-1-ПП от 01.04.2024.docx'
     for key, value in contract_params.items():
         for paragraph in template_doc.paragraphs:
             replace_text(paragraph, f'=={key}==', value)
         for table in template_doc.tables:
             replace_text_in_tables(table, key, value)
-    template_doc.save(path)
+    template_doc.save(result)
+
 
 
 def replace_text(paragraph, key, value):
