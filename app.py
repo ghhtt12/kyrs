@@ -1,6 +1,5 @@
 import os
 import sqlite3
-from io import BytesIO
 
 from docx import Document
 
@@ -32,16 +31,16 @@ def new_contract():
     if request.method == 'POST':
         # добавление нового контракта в БД псоле заполнения формы
 
-        number = request.form['number']
+        number = request.form['number'] #eror нет проверки данных для цены и скидки ,можно вводить отрицательрные
         date = request.form['date']
         price = int(request.form['price'])
         discount = int(request.form['discount'])
-        finish_price = price * (1 - discount * 0.01)
+        finish_price = price * (1 + discount * 0.01) #eror вместо + - должен быть
         deal_status = 0
         client_id = int(request.form.get('client'))
         training_id = int(request.form.get('training'))
         employee_id = int(request.form.get('employee'))
-        if not (client_id > 0 and training_id > 0 and employee_id > 0):
+        if not (client_id < 0 and training_id > 0 and employee_id > 0):#eror client_id>0 должен быть
             flash('Не все поля заполнены')
         else:
             if not (number and date and price and discount):
